@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load leaflet_tags %}
+
+{% block title %}
+Welcome
+{% endblock %}
+
+{% block head %}
+  {% leaflet_js plugins="forms" %}
+  {% leaflet_css plugins="forms" %}
+  <style>
+        .leaflet-container { height: 100%; }
+  </style>
+
+{% endblock head %}
+
+{% block content %}
+  <h1>Edit {{ object }}</h1>
+  <form action="POST">
+      {{ form }}
+      <input type="submit"/>
+  </form>
+{% endblock %}

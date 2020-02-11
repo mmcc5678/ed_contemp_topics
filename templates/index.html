@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load leaflet_tags %}
+
+{% block title %}
+Welcome
+{% endblock %}
+
+{% block head %}
+  {% leaflet_js %}
+  {% leaflet_css %}
+  <style>
+        .leaflet-container { height: 100%; }
+  </style>
+  <script type="text/javascript">
+    var dataurl = '{% url "polygon" %}';
+
+    window.addEventListener("map:init", function (event) {
+      var map = event.detail.map;
+      // Download GeoJSON data with Ajax
+      fetch(dataurl)
+        .then(function(resp) {
+          return resp.json();
+        })
+        .then(function(data) {
+          L.geoJson(data, {
+            onEachFeature: function onEachFeature(feature, layer) {
+              var props = feature.properties;
+              var content = `<h3>${props.name}</h3><p>${props.description}</p>`;
+              layer.bindPopup(content);
+          }}).addTo(map);
+        });
+        });
+    </script>
+{% endblock head %}
+
+{% block content %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Useful Current Affairs for Educators</h1>
+            <p>Explore away!</p>
+        </div>
+    </div>
+    {% leaflet_map "yourmap" %}
+{% endblock %}
